@@ -31,6 +31,10 @@ public class SandboxMod
     {
     	proxy.preInit(event);
     }
+    double A = Math.log(16);
+    double e = 8.854*Math.pow(10, -12);
+    double pi = Math.PI;
+    double x = 2*pi*e*(1 + (1-Math.log(2))/A + (1 + Math.pow(1 - Math.log(2), 2) - (pi*pi)/12)/(A*A))/A;
     
     /**
      * Setup anything that doesn't go in pre- or post-init. Build data structures, register recipes,

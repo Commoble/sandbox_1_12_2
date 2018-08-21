@@ -1,7 +1,7 @@
 package com.github.commoble.sandbox.common;
 
-import com.github.commoble.sandbox.common.block.BlockLedger;
-import com.github.commoble.sandbox.common.item.ItemLedger;
+import com.github.commoble.sandbox.common.block.BlockRegistrar;
+import com.github.commoble.sandbox.common.item.ItemRegistrar;
 import com.github.commoble.sandbox.common.sound.SoundLedger;
 
 import net.minecraft.block.Block;
@@ -24,13 +24,13 @@ public class RegistryEventHandler
 	@SubscribeEvent
 	public static void registerBlocks(RegistryEvent.Register<Block> event)
 	{
-		BlockLedger.registerBlocks(event);
+		BlockRegistrar.registerBlocks(event);
 	}
 	
 	@SubscribeEvent
 	public static void registerItems(RegistryEvent.Register<Item> event)
 	{
-		ItemLedger.registerItems(event);
+		ItemRegistrar.registerItems(event);
 	}
 	
 	@SubscribeEvent

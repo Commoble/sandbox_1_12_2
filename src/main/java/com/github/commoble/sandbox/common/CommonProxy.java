@@ -1,8 +1,9 @@
 package com.github.commoble.sandbox.common;
 
+import com.github.commoble.sandbox.common.block.BlockExtendedFire;
 import com.github.commoble.sandbox.common.world.WorldGenManager;
-import net.minecraftforge.common.config.Configuration;
-import net.minecraftforge.common.config.Property;
+
+import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
@@ -34,6 +35,7 @@ public class CommonProxy
 		// Blocks, Enchantments, Items, Potions, SoundEvents, and Biomes should be registered with registry events
 		// Entities, Tile Entities, and Dimensions need to be registered here
 		//this.registerTileEntities();
+		//GameRegistry.registerTileEntity(TileEntityTransporter.class, new ResourceLocation(SandboxMod.MODID, "te_transporter"));
 		//this.registerEntities();
 		//this.registerPlanes();
 		GameRegistry.registerWorldGenerator(worldGenManager, 0);
@@ -46,6 +48,10 @@ public class CommonProxy
 	public void load(FMLInitializationEvent event)
 	{
 		// register recipes
+		
+		// redo flammability init
+		// must delay until this point or it'll affect the vanilla fire block instead
+		BlockExtendedFire.init();
 	}
 	
 	/**

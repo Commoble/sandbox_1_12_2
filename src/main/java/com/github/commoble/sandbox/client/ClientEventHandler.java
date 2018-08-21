@@ -1,5 +1,7 @@
 package com.github.commoble.sandbox.client;
 
+import com.github.commoble.sandbox.common.item.ItemRegistrar;
+
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.item.Item;
 import net.minecraftforge.client.event.ModelRegistryEvent;
@@ -11,10 +13,11 @@ public class ClientEventHandler
 	@SubscribeEvent
 	public static void onModelRegister(ModelRegistryEvent e)
 	{
-		
+		//registerItemRenderer(ItemRegistrar.itemBlockTransporter);
+		registerItemRenderer(ItemRegistrar.ash);
 	}
 	
-	private  void registerItemRenderer(Item item)
+	private static void registerItemRenderer(Item item)
 	{
 		ModelLoader.setCustomModelResourceLocation(item, 0, new ModelResourceLocation(item.getRegistryName(), "inventory"));
 	}
