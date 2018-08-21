@@ -30,7 +30,7 @@ public class ItemRegistrar
 	
 	//public static ItemBlock itemBlockTransporter;
 	@ObjectHolder("sandbox:ash")
-	public static final ItemBlock ash = null;
+	public static final Item ash = null;
 	
 	public static void registerItems(RegistryEvent.Register<Item> event)
 	{
