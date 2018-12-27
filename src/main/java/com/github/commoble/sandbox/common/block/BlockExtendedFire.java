@@ -19,7 +19,7 @@ import net.minecraft.world.World;
  */
 public class BlockExtendedFire extends BlockFire
 {
-	public static final float ASH_CHANCE = 0.25F;
+	public static final float ASH_CHANCE = 1.0F;
 	
 	public BlockExtendedFire()
 	{
@@ -169,14 +169,16 @@ public class BlockExtendedFire extends BlockFire
             }
             else
             {
-            	if (iblockstate.isFullCube() && worldIn.rand.nextFloat() < ASH_CHANCE)
+            	// check whether to make ash before setting the block to air because
+            	// only collidable blocks create ash
+            	boolean make_ash = !iblockstate.getBlock().isPassable(worldIn, pos) && worldIn.rand.nextFloat() < ASH_CHANCE;
+            	
+            	worldIn.setBlockToAir(pos);
+            	
+            	if (make_ash)
                 {
-            		worldIn.setBlockState(pos, BlockRegistrar.ash.getDefaultState());
+            		BlockAsh.tryGenerateAsh(worldIn, pos);
                 }
-            	else
-            	{
-            		worldIn.setBlockToAir(pos);
-            	}
             }
 
             if (iblockstate.getBlock() == Blocks.TNT)
