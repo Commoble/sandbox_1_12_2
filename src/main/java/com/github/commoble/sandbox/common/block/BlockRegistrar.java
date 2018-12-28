@@ -26,7 +26,7 @@ public class BlockRegistrar
 		// override default fire block
 		BlockExtendedFire blockExtendedFire = new BlockExtendedFire();
 		blockExtendedFire.setRegistryName("minecraft:fire");
-		blockExtendedFire.setUnlocalizedName("minecraft:fire");
+		blockExtendedFire.setTranslationKey("minecraft:fire");
 		registry.register(blockExtendedFire);
 		
 		registerBlock(registry, new BlockAsh(), BlockNames.ASH_NAME);
@@ -35,7 +35,7 @@ public class BlockRegistrar
 	private static <T extends Block> T registerBlock(IForgeRegistry<Block> registry, T newBlock, String name)
 	{
 		name = SandboxMod.appendPrefix(name);
-		newBlock.setUnlocalizedName(name);
+		newBlock.setTranslationKey(name);
 		newBlock.setRegistryName(name);
 		registry.register(newBlock);
 		return newBlock;

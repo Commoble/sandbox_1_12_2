@@ -115,7 +115,7 @@ public class BlockExtendedFire extends BlockFire
 
                                 if (k1 > 0)
                                 {
-                                    int l1 = (k1 + 40 + worldIn.getDifficulty().getDifficultyId() * 7) / (i + 30);
+                                    int l1 = (k1 + 40 + worldIn.getDifficulty().getId() * 7) / (i + 30);
 
                                     if (flag1)
                                     {
@@ -183,7 +183,7 @@ public class BlockExtendedFire extends BlockFire
 
             if (iblockstate.getBlock() == Blocks.TNT)
             {
-                Blocks.TNT.onBlockDestroyedByPlayer(worldIn, pos, iblockstate.withProperty(BlockTNT.EXPLODE, Boolean.valueOf(true)));
+                Blocks.TNT.onPlayerDestroy(worldIn, pos, iblockstate.withProperty(BlockTNT.EXPLODE, Boolean.valueOf(true)));
             }
         }
     }

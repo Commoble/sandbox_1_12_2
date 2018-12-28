@@ -22,7 +22,7 @@ public class ItemRegistrar
 	// creative tab for the stuff
 	public static final CreativeTabs tab = new CreativeTabs("sandbox") {
 		@Override
-		public ItemStack getTabIconItem()
+		public ItemStack createIcon()
 		{
 			return new ItemStack(Blocks.SANDSTONE);
 		}
@@ -44,7 +44,7 @@ public class ItemRegistrar
 	private static <T extends Item> T registerItem(IForgeRegistry<Item> registry, T newItem, String name)
 	{
 		name = SandboxMod.appendPrefix(name);
-		newItem.setUnlocalizedName(name);
+		newItem.setTranslationKey(name);
 		newItem.setRegistryName(name);
 		registry.register(newItem);
 		return newItem;
