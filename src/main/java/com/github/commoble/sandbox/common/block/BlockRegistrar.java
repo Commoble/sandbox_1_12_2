@@ -17,6 +17,17 @@ public class BlockRegistrar
 	
 	@ObjectHolder("sandbox:ash")
 	public static final BlockAsh ash = null;
+	
+	@ObjectHolder("sandbox:battery")
+	public static final BlockBattery battery = null;
+	
+	@ObjectHolder("sandbox:wire")
+	public static final BlockWire wire = null;
+	
+	@ObjectHolder("sandbox:lightbulb")
+	public static final BlockLightbulb lightbulb = null;
+	
+	
 
 	public static void registerBlocks(RegistryEvent.Register<Block> event)
 	{

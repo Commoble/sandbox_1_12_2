@@ -39,6 +39,10 @@ public class ItemRegistrar
 		//grinderItemBlock = registerItemBlock(event.getRegistry(), new ItemBlock(BlockLedger.grinderBlock), "grinder");
 		//grinderItemBlock.setCreativeTab(trtab);
 		registerItem(registry, new ItemBlock(BlockRegistrar.ash), BlockNames.ASH_NAME);
+		
+		registerItem(registry, new ItemBlock(BlockRegistrar.battery), BlockNames.BATTERY_NAME);
+		registerItem(registry, new ItemBlock(BlockRegistrar.wire), BlockNames.WIRE_NAME);
+		registerItem(registry, new ItemBlock(BlockRegistrar.lightbulb), BlockNames.LIGHTBULB_NAME);
 	}
 	
 	private static <T extends Item> T registerItem(IForgeRegistry<Item> registry, T newItem, String name)
