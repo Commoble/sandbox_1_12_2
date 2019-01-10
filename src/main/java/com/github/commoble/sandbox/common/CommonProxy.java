@@ -1,6 +1,7 @@
 package com.github.commoble.sandbox.common;
 
 import com.github.commoble.sandbox.common.block.BlockExtendedFire;
+import com.github.commoble.sandbox.common.tileentity.TileEntityRegistrar;
 import com.github.commoble.sandbox.common.world.WorldGenManager;
 
 import net.minecraft.util.ResourceLocation;
@@ -34,8 +35,7 @@ public class CommonProxy
 		// Registration
 		// Blocks, Enchantments, Items, Potions, SoundEvents, and Biomes should be registered with registry events
 		// Entities, Tile Entities, and Dimensions need to be registered here
-		//this.registerTileEntities();
-		//GameRegistry.registerTileEntity(TileEntityTransporter.class, new ResourceLocation(SandboxMod.MODID, "te_transporter"));
+		TileEntityRegistrar.registerTileEntities();
 		//this.registerEntities();
 		//this.registerPlanes();
 		GameRegistry.registerWorldGenerator(worldGenManager, 0);

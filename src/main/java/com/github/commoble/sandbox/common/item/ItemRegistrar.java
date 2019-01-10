@@ -28,9 +28,17 @@ public class ItemRegistrar
 		}
 	};
 	
-	//public static ItemBlock itemBlockTransporter;
+	//itemblocks
 	@ObjectHolder("sandbox:ash")
 	public static final Item ash = null;
+
+	@ObjectHolder("sandbox:battery")
+	public static final Item battery = null;
+	@ObjectHolder("sandbox:lightbulb")
+	public static final Item lightbulb = null;
+	@ObjectHolder("sandbox:wire")
+	public static final Item wire = null;
+	
 	
 	public static void registerItems(RegistryEvent.Register<Item> event)
 	{
