@@ -25,6 +25,11 @@ public class BlockWithFacing extends BlockDirectional
         return new BlockStateContainer(this, new IProperty[] {FACING});
     }
     
+    public EnumFacing getFacingOfBlockState(IBlockState state)
+    {
+    	return ((EnumFacing)state.getValue(FACING));
+    }
+    
     /**
      * Returns the blockstate with the given rotation from the passed blockstate. If inapplicable, returns the passed
      * blockstate.
