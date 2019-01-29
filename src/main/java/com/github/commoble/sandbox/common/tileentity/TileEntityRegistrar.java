@@ -11,7 +11,6 @@ public class TileEntityRegistrar
 	{
 		GameRegistry.registerTileEntity(TileEntityBattery.class, new ResourceLocation(SandboxMod.MODID, "te_battery"));
 		GameRegistry.registerTileEntity(TileEntityLightbulb.class, new ResourceLocation(SandboxMod.MODID, "te_lightbulb"));
-		GameRegistry.registerTileEntity(TileEntityWire.class, new ResourceLocation(SandboxMod.MODID, "te_wire"));
 		
 	}
 }

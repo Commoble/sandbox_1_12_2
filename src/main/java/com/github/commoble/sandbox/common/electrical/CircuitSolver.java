@@ -4,6 +4,8 @@ import java.util.HashSet;
 
 import com.github.commoble.sandbox.common.block.IElectricalBlock;
 
+import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -27,23 +29,30 @@ public class CircuitSolver
 		//	-if node has not been visited, visit it
 		//	-otherwise, if previously-visited node is not immediately previously visited node AND is original node,
 			//	then complete circuit has been found; otherwise ignore it
+		// also the first block must be electrical
+
 		HashSet<BlockPos> traversed = new HashSet<BlockPos>();
-		traversed.add(startPos);
 		
 		return isCompleteCircuit(world, startPos, startPos, startPos, traversed);
 	}
 	
 	private static boolean isCompleteCircuit(World world, BlockPos checkPos, BlockPos prevPos, BlockPos firstPos, HashSet<BlockPos> traversed)
 	{
-		for(EnumFacing face : EnumFacing.VALUES)
+		// add to traversed even if not electrical so it still won't be checked twice
+		// doing it this way, however, means that firstpos must be electrical for it the implementation to work
+		traversed.add(checkPos);
+		IBlockState checkState = world.getBlockState(checkPos);
+		Block checkBlock = checkState.getBlock();
+		if (checkBlock instanceof IElectricalBlock)
 		{
-			BlockPos nextCheck = checkPos.offset(face);
-			if (world.getBlockState(nextCheck).getBlock() instanceof IElectricalBlock)
+			for(EnumFacing face : ((IElectricalBlock)checkBlock).getConnectingFaces(world, checkState, checkPos))
 			{
+				BlockPos nextCheck = checkPos.offset(face);
+
 				if (!traversed.contains(nextCheck))
 				{
-					traversed.add(nextCheck);
-					return isCompleteCircuit(world, nextCheck, checkPos, firstPos, traversed);
+					boolean found = isCompleteCircuit(world, nextCheck, checkPos, firstPos, traversed);
+					if (found) return true; 
 				}
 				else	// has been visited
 				{
@@ -53,12 +62,12 @@ public class CircuitSolver
 					}
 				}
 			}
-			else	// not an electrical block
-			{
-				continue;
-			}
+			
+			return false;
 		}
-		
-		return false;
+		else // not electrical block
+		{
+			return false;
+		}
 	}
 }

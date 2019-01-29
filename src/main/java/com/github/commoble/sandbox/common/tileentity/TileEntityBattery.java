@@ -30,6 +30,7 @@ public class TileEntityBattery extends TileEntity implements ITickable
 	{
 		if (this.circuit_update_check_pending)
 		{
+			this.circuit_update_check_pending = false;
 			System.out.println("Update pending");
 			BlockPos selfPos = this.pos;
 			BlockPos nextPos = selfPos.offset(this.positiveSide);
@@ -49,8 +50,6 @@ public class TileEntityBattery extends TileEntity implements ITickable
 					System.out.println("Not complete circuit");
 				}
 			}
-			
-			this.circuit_update_check_pending = false;
 		}
 	}
 	
