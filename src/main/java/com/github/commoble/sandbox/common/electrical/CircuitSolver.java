@@ -2,6 +2,9 @@ package com.github.commoble.sandbox.common.electrical;
 
 import java.util.HashSet;
 
+import javax.annotation.Nullable;
+
+import com.github.commoble.sandbox.common.block.CategoriesOfBlocks;
 import com.github.commoble.sandbox.common.block.IElectricalBlock;
 
 import net.minecraft.block.Block;
@@ -69,5 +72,42 @@ public class CircuitSolver
 		{
 			return false;
 		}
+	}
+
+	/**
+	 * Gathers data to build a Circuit data structure, starting from a voltage source.
+	 * Precondition: The three positions given represent electrical blocks and are part of a complete circuit 
+	 * @param world The world
+	 * @param sourcePos The voltage source's position
+	 * @param startPos The positive-side position adjacent to the source
+	 * @param endPos The negative-side position adjacent to the source
+	 * @return
+	 */
+	@Nullable
+	public static Circuit buildCircuit(World world, BlockPos sourcePos, BlockPos startPos, BlockPos endPos)
+	{
+		Node groundNode = Node.buildNodeFrom(world, sourcePos, endPos);
+		if (groundNode == null)
+		{
+			world.setBlockToAir(sourcePos);
+			world.createExplosion(null, sourcePos.getX(), sourcePos.getY(), sourcePos.getZ(), 1F, false);
+			System.out.println("Ground node returned null, exploding");
+			return null;
+		}
+		Circuit circuit = Circuit.buildCircuitFromGround(world, groundNode);
+		if (circuit == null)
+		{
+			System.out.println("Circuit returned null, exploding");
+			world.setBlockToAir(sourcePos);
+			world.createExplosion(null, sourcePos.getX(), sourcePos.getY(), sourcePos.getZ(), 1F, false);
+			return null;
+		}
+		circuit.printToConsole(world);
+		return circuit;
+	}
+	
+	public static boolean isWireBlock(World world, BlockPos pos)
+	{
+		return CategoriesOfBlocks.wireBlocks.contains(world.getBlockState(pos).getBlock());
 	}
 }

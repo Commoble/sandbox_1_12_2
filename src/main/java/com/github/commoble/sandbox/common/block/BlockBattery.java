@@ -17,7 +17,7 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
-public class BlockBattery extends BlockWithFacing implements ITileEntityProvider, IElectricalBlock
+public class BlockBattery extends BlockWithFacing implements IElectricalBlock
 {
 	// facing of block = facing of positive side
 	
@@ -32,9 +32,15 @@ public class BlockBattery extends BlockWithFacing implements ITileEntityProvider
 		this.setDefaultState(this.blockState.getBaseState().withProperty(FACING, EnumFacing.WEST));
         
 	}
+	
+	@Override
+	public boolean hasTileEntity(IBlockState state)
+	{
+		return true;
+	}
 
 	@Override
-	public TileEntity createNewTileEntity(World worldIn, int meta)
+	public TileEntity createTileEntity(World worldIn, IBlockState state)
 	{
 		// TODO Auto-generated method stub
 		return new TileEntityBattery();

@@ -4,6 +4,7 @@ import java.util.EnumSet;
 import java.util.Set;
 
 import com.github.commoble.sandbox.common.item.ItemRegistrar;
+import com.github.commoble.sandbox.common.tileentity.TileEntityBattery;
 import com.github.commoble.sandbox.common.tileentity.TileEntityLightbulb;
 
 import net.minecraft.block.Block;
@@ -16,7 +17,7 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
-public class BlockLightbulb extends Block implements ITileEntityProvider, IElectricalBlock
+public class BlockLightbulb extends Block implements IElectricalBlock
 {
 	public static final EnumSet<EnumFacing> CONNECTABLE_FACES = EnumSet.allOf(EnumFacing.class);
 
@@ -27,9 +28,15 @@ public class BlockLightbulb extends Block implements ITileEntityProvider, IElect
 		this.setSoundType(SoundType.GLASS);
 		this.setHardness(0.3F);	// same as Glass block
 	}
+	
+	@Override
+	public boolean hasTileEntity()
+	{
+		return true;
+	}
 
 	@Override
-	public TileEntity createNewTileEntity(World worldIn, int meta)
+	public TileEntity createTileEntity(World worldIn, IBlockState state)
 	{
 		// TODO Auto-generated method stub
 		return new TileEntityLightbulb();

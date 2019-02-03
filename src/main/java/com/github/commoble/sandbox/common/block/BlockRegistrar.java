@@ -44,7 +44,6 @@ public class BlockRegistrar
 		registerBlock(registry, new BlockBattery(), BlockNames.BATTERY_NAME);
 		registerBlock(registry, new BlockWire(), BlockNames.WIRE_NAME);
 		registerBlock(registry, new BlockLightbulb(), BlockNames.LIGHTBULB_NAME);
-		
 	}
 	
 	private static <T extends Block> T registerBlock(IForgeRegistry<Block> registry, T newBlock, String name)

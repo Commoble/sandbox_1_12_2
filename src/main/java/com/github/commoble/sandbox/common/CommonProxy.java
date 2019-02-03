@@ -1,6 +1,8 @@
 package com.github.commoble.sandbox.common;
 
 import com.github.commoble.sandbox.common.block.BlockExtendedFire;
+import com.github.commoble.sandbox.common.block.BlockRegistrar;
+import com.github.commoble.sandbox.common.block.CategoriesOfBlocks;
 import com.github.commoble.sandbox.common.tileentity.TileEntityRegistrar;
 import com.github.commoble.sandbox.common.world.WorldGenManager;
 
@@ -47,6 +49,10 @@ public class CommonProxy
 	 */
 	public void load(FMLInitializationEvent event)
 	{
+		
+		CategoriesOfBlocks.addWireBlock(BlockRegistrar.wire);
+		CategoriesOfBlocks.addActiveComponentBlock(BlockRegistrar.battery);
+		CategoriesOfBlocks.addPassiveComponentBlock(BlockRegistrar.lightbulb);
 		// register recipes
 		
 		// redo flammability init

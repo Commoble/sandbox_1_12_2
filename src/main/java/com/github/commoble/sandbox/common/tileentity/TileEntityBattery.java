@@ -2,6 +2,7 @@ package com.github.commoble.sandbox.common.tileentity;
 
 import com.github.commoble.sandbox.common.block.IElectricalBlock;
 import com.github.commoble.sandbox.common.electrical.ChargePacket;
+import com.github.commoble.sandbox.common.electrical.Circuit;
 import com.github.commoble.sandbox.common.electrical.CircuitSolver;
 
 import net.minecraft.block.Block;
@@ -14,7 +15,6 @@ import net.minecraft.util.math.BlockPos;
 public class TileEntityBattery extends TileEntity implements ITickable
 {
 	public static final double NOMINAL_VOLTAGE = 12D;	// voltage output under ideal conditions
-	public static final double MAX_CURRENT_DRAW = 30D;	// maximum current output in amps
 	
 	protected EnumFacing positiveSide;
 	protected EnumFacing negativeSide;
@@ -43,7 +43,8 @@ public class TileEntityBattery extends TileEntity implements ITickable
 				// check if this is part of a complete circuit
 				if (CircuitSolver.isCompleteCircuit(this.world, selfPos))
 				{
-					System.out.println("Complete circuit");
+					System.out.println("Complete circuit, building circuit");
+					Circuit circuit = CircuitSolver.buildCircuit(this.world, selfPos, nextPos, prevPos);
 				}
 				else
 				{
