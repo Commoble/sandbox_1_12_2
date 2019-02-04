@@ -1,10 +1,14 @@
 package com.github.commoble.sandbox.client;
 
+import com.github.commoble.sandbox.client.explodingchicken.RenderExplodingChicken;
 import com.github.commoble.sandbox.common.CommonProxy;
+import com.github.commoble.sandbox.common.explodingchicken.EntityExplodingChicken;
+
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.ItemModelMesher;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.item.Item;
+import net.minecraftforge.fml.client.registry.RenderingRegistry;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
@@ -24,6 +28,7 @@ public class CombinedClientProxy extends CommonProxy
 		super.preInit(event);	// run CommonProxy's preInit first to get things registered
 		
 		// entity renderers
+		RenderingRegistry.registerEntityRenderingHandler(EntityExplodingChicken.class, RenderExplodingChicken.FACTORY);
 		
 		// tile entity renderers
 	}

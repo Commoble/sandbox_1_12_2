@@ -3,6 +3,7 @@ package com.github.commoble.sandbox.common;
 import com.github.commoble.sandbox.common.block.BlockExtendedFire;
 import com.github.commoble.sandbox.common.block.BlockRegistrar;
 import com.github.commoble.sandbox.common.block.CategoriesOfBlocks;
+import com.github.commoble.sandbox.common.explodingchicken.EntityExplodingChicken;
 import com.github.commoble.sandbox.common.tileentity.TileEntityRegistrar;
 import com.github.commoble.sandbox.common.world.WorldGenManager;
 
@@ -10,6 +11,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
+import net.minecraftforge.fml.common.registry.EntityRegistry;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 
 public class CommonProxy
@@ -39,6 +41,7 @@ public class CommonProxy
 		// Entities, Tile Entities, and Dimensions need to be registered here
 		TileEntityRegistrar.registerTileEntities();
 		//this.registerEntities();
+		EntityRegistry.registerModEntity(new ResourceLocation(SandboxMod.MODID, "explodingchicken"), EntityExplodingChicken.class, "explodingchicken", 0, SandboxMod.instance, 40, 3, false, 0xFF0000, 0xFFFFFF);
 		//this.registerPlanes();
 		GameRegistry.registerWorldGenerator(worldGenManager, 0);
 	}

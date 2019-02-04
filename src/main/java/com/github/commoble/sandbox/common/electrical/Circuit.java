@@ -40,7 +40,14 @@ public class Circuit
 		
 		circuit = expandCircuitFromNode(world, circuit, groundNode);		
 		
+		circuit.doAnalysis();
+		
 		return circuit;
+	}
+	
+	private void doAnalysis()
+	{
+		
 	}
 	
 	private static Circuit expandCircuitFromNode(World world, Circuit circuit, Node baseNode)

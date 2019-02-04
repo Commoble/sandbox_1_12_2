@@ -102,6 +102,7 @@ public class CircuitSolver
 			world.createExplosion(null, sourcePos.getX(), sourcePos.getY(), sourcePos.getZ(), 1F, false);
 			return null;
 		}
+		
 		circuit.printToConsole(world);
 		return circuit;
 	}
