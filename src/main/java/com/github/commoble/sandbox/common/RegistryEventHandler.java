@@ -18,7 +18,7 @@ import net.minecraftforge.registries.IForgeRegistry;
  * @author Joseph
  *
  */
-@Mod.EventBusSubscriber
+@Mod.EventBusSubscriber(modid = SandboxMod.MODID)
 public class RegistryEventHandler
 {
 	@SubscribeEvent

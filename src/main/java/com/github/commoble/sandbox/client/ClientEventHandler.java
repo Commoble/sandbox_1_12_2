@@ -1,5 +1,6 @@
 package com.github.commoble.sandbox.client;
 
+import com.github.commoble.sandbox.common.SandboxMod;
 import com.github.commoble.sandbox.common.item.ItemRegistrar;
 
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
@@ -9,7 +10,7 @@ import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
-@Mod.EventBusSubscriber
+@Mod.EventBusSubscriber(modid = SandboxMod.MODID)
 public class ClientEventHandler
 {
 	@SubscribeEvent
