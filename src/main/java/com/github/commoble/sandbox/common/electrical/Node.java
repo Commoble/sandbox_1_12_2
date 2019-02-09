@@ -23,6 +23,9 @@ import net.minecraft.world.World;
  */
 public class Node
 {
+	/** The identifier for this node, for the purpose of solving the circuit containing it (-1 = the ground node) **/
+	public int identifier;
+	
 	/**
 	 * The set of all block positions that represent wires in the node
 	 */

@@ -13,13 +13,21 @@ public class CircuitElement
 {
 	public BlockPos componentPos;
 	public IBlockState componentState;
-	public Node[] adjacentNodes;	// currently only two nodes are supported
+	public Node nodeA;
+	public Node nodeB;
+		// they may be the same node
+
+	public int identifier; // identifier of the component as seen by the circuit it is contained in
+		// (determined when solving the circuit)
+		// resistors will be 0,1,2, etc
+		// sources will be 0,1,2, etc, independant from resistors
 
 	public CircuitElement(World world, BlockPos componentPos, Node nodeA, Node nodeB)
 	{
 		this.componentPos = componentPos;
 		this.componentState = world.getBlockState(componentPos);
-		this.adjacentNodes = new Node[] {nodeA, nodeB};
+		this.nodeA = nodeA;
+		this.nodeB = nodeB;
 	}
 	
 	@Override
@@ -31,6 +39,6 @@ public class CircuitElement
 	@Override
 	public boolean equals(Object o)
 	{
-		return (o instanceof CircuitElement && ((CircuitElement)o).componentPos == this.componentPos);
+		return (o instanceof CircuitElement && ((CircuitElement)o).componentPos.equals(this.componentPos));
 	}
 }
