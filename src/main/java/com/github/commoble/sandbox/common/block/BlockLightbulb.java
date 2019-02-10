@@ -30,7 +30,7 @@ public class BlockLightbulb extends Block implements IElectricalBlock
 	}
 	
 	@Override
-	public boolean hasTileEntity()
+	public boolean hasTileEntity(IBlockState state)
 	{
 		return true;
 	}

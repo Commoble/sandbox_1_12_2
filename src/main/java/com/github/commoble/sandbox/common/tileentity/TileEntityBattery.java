@@ -1,9 +1,11 @@
 package com.github.commoble.sandbox.common.tileentity;
 
 import com.github.commoble.sandbox.common.block.IElectricalBlock;
-import com.github.commoble.sandbox.common.electrical.ChargePacket;
 import com.github.commoble.sandbox.common.electrical.Circuit;
-import com.github.commoble.sandbox.common.electrical.CircuitSolver;
+import com.github.commoble.sandbox.common.electrical.CircuitBuilder;
+import com.github.commoble.sandbox.common.electrical.CircuitElement;
+import com.github.commoble.sandbox.common.electrical.Node;
+import com.github.commoble.sandbox.common.electrical.VoltageSourceElement;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
@@ -12,7 +14,7 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ITickable;
 import net.minecraft.util.math.BlockPos;
 
-public class TileEntityBattery extends TileEntity implements ITickable
+public class TileEntityBattery extends TileEntity implements ITickable, ICircuitElementHolderTE
 {
 	public static final double NOMINAL_VOLTAGE = 12D;	// voltage output under ideal conditions
 	
@@ -24,6 +26,14 @@ public class TileEntityBattery extends TileEntity implements ITickable
 
 	public boolean circuit_update_check_pending = false;	// only set this on server
 	
+	public VoltageSourceElement element = null;
+
+	@Override
+	public CircuitElement createCircuitElement(Node nodeA, Node nodeB)
+	{
+		this.element = new VoltageSourceElement(this.world, this.pos, nodeA, nodeB, 10D);
+		return this.element;
+	}
 
 	@Override
 	public void update()
@@ -41,10 +51,10 @@ public class TileEntityBattery extends TileEntity implements ITickable
 			if (nextBlock instanceof IElectricalBlock && prevBlock instanceof IElectricalBlock)
 			{
 				// check if this is part of a complete circuit
-				if (CircuitSolver.isCompleteCircuit(this.world, selfPos))
+				if (CircuitBuilder.isCompleteCircuit(this.world, selfPos))
 				{
 					System.out.println("Complete circuit, building circuit");
-					Circuit circuit = CircuitSolver.buildCircuit(this.world, selfPos, nextPos, prevPos);
+					Circuit circuit = CircuitBuilder.buildCircuit(this.world, selfPos, nextPos, prevPos);
 				}
 				else
 				{

@@ -9,9 +9,11 @@ import javax.annotation.Nullable;
 import com.github.commoble.sandbox.common.block.CategoriesOfBlocks;
 import com.github.commoble.sandbox.common.block.IElectricalBlock;
 import com.github.commoble.sandbox.common.block.ITwoTerminalVoltageSource;
+import com.github.commoble.sandbox.common.tileentity.ICircuitElementHolderTE;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -41,36 +43,33 @@ public class Circuit
 	
 	public void addCircuitComponent(World world, BlockPos pos, Node nodeA, Node nodeB)
 	{
-		Block block = world.getBlockState(pos).getBlock();
-		
-		if (CategoriesOfBlocks.activeComponentBlocks.contains(block))
+		IBlockState state = world.getBlockState(pos);
+		Block block = state.getBlock();
+		TileEntity te = world.getTileEntity(pos);
+		if (te != null && te instanceof ICircuitElementHolderTE)
 		{
+			CircuitElement element;
 			if (block instanceof ITwoTerminalVoltageSource)
 			{
-				// figure out which node is which
 				BlockPos positiveEnd = pos.offset(((ITwoTerminalVoltageSource)block).getPositiveFace(world, pos));
-				CircuitElement component;
 				if (nodeA.contains(positiveEnd))
 				{
-					component = new VoltageSourceElement(world, pos, nodeA, nodeB, 10D);
+					element = ((ICircuitElementHolderTE)te).createCircuitElement(nodeA, nodeB);
 				}
 				else
 				{
-					component = new VoltageSourceElement(world, pos, nodeB, nodeA, 10D);
+					element = ((ICircuitElementHolderTE)te).createCircuitElement(nodeB, nodeA);
 				}
-				this.components.put(pos, component);
 			}
-			else	// just do it anyway
+			else
 			{
-				System.out.println("Voltage source at " + pos.toString() + " not marked as two-terminal source; will add to circuit, but may cause inaccuracies");
-				CircuitElement component = new VoltageSourceElement(world, pos, nodeA, nodeB, 10D);
-				this.components.put(pos, component);
+				element = ((ICircuitElementHolderTE)te).createCircuitElement(nodeA, nodeB);
 			}
+			this.components.put(pos, element);
 		}
-		else if (CategoriesOfBlocks.passiveComponentBlocks.contains(block))
+		else
 		{
-			CircuitElement component = new ResistorElement(world, pos, nodeA, nodeB, 1000D);
-			this.components.put(pos, component);
+			System.out.println("Something borked!");
 		}
 	}
 	
@@ -137,10 +136,10 @@ public class Circuit
 				rCounter++;
 			}
 		}
-		int independantSourceCount = vSourceMap.size();
-		int resistorCount = resistorMap.size();
-		VoltageSourceElement[] vSourceArray = new VoltageSourceElement[independantSourceCount];
-		ResistorElement[] resistorArray = new ResistorElement[resistorCount];
+		//int independantSourceCount = vSourceMap.size();
+		//int resistorCount = resistorMap.size();
+		VoltageSourceElement[] vSourceArray = new VoltageSourceElement[vCounter];
+		ResistorElement[] resistorArray = new ResistorElement[rCounter];
 		for (VoltageSourceElement source : vSourceMap.values())
 		{
 			vSourceArray[source.identifier] = source;
@@ -153,8 +152,8 @@ public class Circuit
 		// everything's organized now! /s
 		
 		
-		double[][] matrixDataA = new double[nonGroundNodeCount + independantSourceCount][nonGroundNodeCount + independantSourceCount];
-		double[] matrixDataZ = new double[nonGroundNodeCount + independantSourceCount];
+		double[][] matrixDataA = new double[nonGroundNodeCount + vCounter][nonGroundNodeCount + vCounter];
+		double[] matrixDataZ = new double[nonGroundNodeCount + vCounter];
 		
 		// Matrix A contains known quantities relating to resistance, conductance, and the direction of current
 		// it can be broken up into four sub-matrices:
@@ -203,7 +202,7 @@ public class Circuit
 			// m represents voltage source
 			// [m,n] is 1 if positive end of source touches node, -1 if negative touches node, 0 if source does not touch node
 			// Matrix C is the same, but transposed horizontally/vertically
-			for (int j=0; j<independantSourceCount; j++)
+			for (int j=0; j<vCounter; j++)
 			{
 				if (nonGroundNodes[i].equals(vSourceArray[j].getPositiveNode()))
 				{
@@ -228,7 +227,7 @@ public class Circuit
 		// (otherwise divide by zero can occur)
 		// The values in this submatrix are negative resistance values approximately proportional to
 		// the resistance of the wires through the source (i.e. very small resistance)
-		for (int j=0; j < independantSourceCount; j++)
+		for (int j=0; j < vCounter; j++)
 		{
 			matrixDataA[nonGroundNodeCount + j][nonGroundNodeCount + j] = -0.000001D; // replace later
 		}
@@ -239,7 +238,7 @@ public class Circuit
 		
 		// ignoring current sources for now
 		// voltage sources:
-		for (int j=0; j < independantSourceCount; j++)
+		for (int j=0; j < vCounter; j++)
 		{
 			matrixDataZ[nonGroundNodeCount + j] = vSourceArray[j].getNominalVoltage();
 		}
@@ -273,14 +272,14 @@ public class Circuit
 			double vB = (nodeIDB == -1 ? 0D : vectorX.getEntry(nodeIDB));
 			double voltageDiff = Math.abs(vA - vB);
 			double power = voltageDiff * voltageDiff / resistor.getNominalResistance();	// P = V^2 / R
-			System.out.println("Resistor R" + resistor.identifier + " between nodes N" + (nodeIDA + 1) + " and N" + (nodeIDB + 1) + " has power of " + EngineeringNotation.toSIUnit(power, "watts"));
+			System.out.println("Resistor R" + resistor.identifier + " between nodes N" + (nodeIDA + 1) + " and N" + (nodeIDB + 1) + " has power of " + EngineeringNotation.toSIUnit(power, "W"));
 		}
 		for (VoltageSourceElement source : vSourceArray)
 		{
 			int nodeIDA = source.nodeA.identifier;
 			int nodeIDB = source.nodeB.identifier;
 			double power = source.getNominalVoltage() * vectorX.getEntry(nonGroundNodeCount + source.identifier);	// P = V * I
-			System.out.println("Source V" + source.identifier + " between nodes N" + (nodeIDA + 1) + " and N" + (nodeIDB + 1) + " has power of " + EngineeringNotation.toSIUnit(power, "watts"));
+			System.out.println("Source V" + source.identifier + " between nodes N" + (nodeIDA + 1) + " and N" + (nodeIDB + 1) + " has power of " + EngineeringNotation.toSIUnit(power, "W"));
 		}
 	}
 	
@@ -348,7 +347,7 @@ public class Circuit
 				if (prevPos != null)
 				{
 					System.out.println("Adding dead node");
-					Node newNode = Node.createDeadNode(prevPos);
+					Node newNode = Node.createDeadNode(componentPos);
 					circuit.nodes.add(newNode);
 					circuit.addCircuitComponent(world, componentPos, baseNode, newNode);
 					continue;
@@ -374,10 +373,32 @@ public class Circuit
 			// if next node is a virtual node
 			if (CategoriesOfBlocks.isAnyComponentBlock(nextBlock))
 			{
-				Node newNode = Node.createVirtualNode(componentPos, nextPos);
-				circuit.addCircuitComponent(world, componentPos, baseNode, newNode);
-				circuit = circuit.expandCircuitFromNode(world, circuit, newNode);
-				continue;
+				// check if the virtual node already exists
+				if (circuit.components.containsKey(nextPos))
+				{
+					CircuitElement nextComponent = circuit.components.get(nextPos);
+					if (nextComponent.nodeA.contains(componentPos))
+					{
+						circuit.addCircuitComponent(world, componentPos, baseNode, nextComponent.nodeA);
+					}
+					else if (nextComponent.nodeB.contains(componentPos))
+					{
+						circuit.addCircuitComponent(world, componentPos, baseNode, nextComponent.nodeB);
+					}
+					else	// add dead node so we don't have to deal with this
+					{
+						Node newNode = Node.createDeadNode(componentPos);
+						circuit.nodes.add(newNode);
+						circuit.addCircuitComponent(world, componentPos, baseNode, newNode);
+					}
+				}
+				else
+				{
+					Node newNode = Node.createVirtualNode(componentPos, nextPos);
+					circuit.addCircuitComponent(world, componentPos, baseNode, newNode);
+					circuit = circuit.expandCircuitFromNode(world, circuit, newNode);
+					continue;
+				}
 			}
 			else	// next node starts with a wire block
 			{
