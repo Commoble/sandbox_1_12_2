@@ -19,9 +19,13 @@ public class ClientEventHandler
 		//registerItemRenderer(ItemRegistrar.itemBlockTransporter);
 		registerItemRenderer(ItemRegistrar.ash);
 		
+		// itemblocks
 		registerItemRenderer(ItemRegistrar.battery);
 		registerItemRenderer(ItemRegistrar.lightbulb);
 		registerItemRenderer(ItemRegistrar.wire);
+		
+		// real items
+		registerItemRenderer(ItemRegistrar.mondometer);
 	}
 	
 	private static void registerItemRenderer(Item item)

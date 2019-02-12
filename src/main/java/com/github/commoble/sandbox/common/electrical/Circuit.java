@@ -29,6 +29,9 @@ public class Circuit
 	public HashSet<Node> nodes = new HashSet<Node>();
 	public HashMap<BlockPos, CircuitElement> components = new HashMap<BlockPos, CircuitElement>();
 	
+	/** If this is true, the circuit needs an update and must be rebuilt **/
+	public boolean nullified = false;
+	
 	public boolean isPositionInAnyKnownNode(BlockPos pos)
 	{
 		for (Node node : this.nodes)

@@ -39,6 +39,10 @@ public class ItemRegistrar
 	@ObjectHolder("sandbox:wire")
 	public static final Item wire = null;
 	
+	// real items
+	@ObjectHolder("sandbox:mondometer")
+	public static final Item mondometer = null;
+	
 	
 	public static void registerItems(RegistryEvent.Register<Item> event)
 	{
@@ -48,9 +52,13 @@ public class ItemRegistrar
 		//grinderItemBlock.setCreativeTab(trtab);
 		registerItem(registry, new ItemBlock(BlockRegistrar.ash), BlockNames.ASH_NAME);
 		
+		// itemblocks
 		registerItem(registry, new ItemBlock(BlockRegistrar.battery), BlockNames.BATTERY_NAME);
 		registerItem(registry, new ItemBlock(BlockRegistrar.wire), BlockNames.WIRE_NAME);
 		registerItem(registry, new ItemBlock(BlockRegistrar.lightbulb), BlockNames.LIGHTBULB_NAME);
+		
+		// real items
+		registerItem(registry, new ItemMondometer(), ItemNames.MONDOMETER_NAME);
 	}
 	
 	private static <T extends Item> T registerItem(IForgeRegistry<Item> registry, T newItem, String name)

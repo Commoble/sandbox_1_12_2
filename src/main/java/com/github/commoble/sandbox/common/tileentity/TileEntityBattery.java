@@ -2,7 +2,7 @@ package com.github.commoble.sandbox.common.tileentity;
 
 import com.github.commoble.sandbox.common.block.IElectricalBlock;
 import com.github.commoble.sandbox.common.electrical.Circuit;
-import com.github.commoble.sandbox.common.electrical.CircuitBuilder;
+import com.github.commoble.sandbox.common.electrical.CircuitHelper;
 import com.github.commoble.sandbox.common.electrical.CircuitElement;
 import com.github.commoble.sandbox.common.electrical.Node;
 import com.github.commoble.sandbox.common.electrical.VoltageSourceElement;
@@ -51,10 +51,10 @@ public class TileEntityBattery extends TileEntity implements ITickable, ICircuit
 			if (nextBlock instanceof IElectricalBlock && prevBlock instanceof IElectricalBlock)
 			{
 				// check if this is part of a complete circuit
-				if (CircuitBuilder.isCompleteCircuit(this.world, selfPos))
+				if (CircuitHelper.isCompleteCircuit(this.world, selfPos))
 				{
 					System.out.println("Complete circuit, building circuit");
-					Circuit circuit = CircuitBuilder.buildCircuit(this.world, selfPos, nextPos, prevPos);
+					Circuit circuit = CircuitHelper.buildCircuit(this.world, selfPos, nextPos, prevPos);
 				}
 				else
 				{

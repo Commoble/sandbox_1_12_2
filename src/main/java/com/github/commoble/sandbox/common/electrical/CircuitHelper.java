@@ -13,7 +13,7 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
-public class CircuitBuilder
+public class CircuitHelper
 {
 	public static boolean isCompleteCircuit(World world, BlockPos startPos)
 	{
@@ -110,5 +110,18 @@ public class CircuitBuilder
 	public static boolean isWireBlock(World world, BlockPos pos)
 	{
 		return CategoriesOfBlocks.wireBlocks.contains(world.getBlockState(pos).getBlock());
+	}
+	
+	/**
+	 * Called when a circuit needs to be marked as needing to be updated after a change to a wire block.
+	 * The wire block does not have access to the circuit, so it must find the nearest ICircuitElementHolderTE,
+	 * and use that to nullify the circuit
+	 * @param circuit
+	 * @param pos
+	 */
+	public static void updateCircuit(World world, BlockPos pos)
+	{
+		HashSet<BlockPos> traversed = new HashSet<BlockPos>();
+		traversed.add(pos);
 	}
 }

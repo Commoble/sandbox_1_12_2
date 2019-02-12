@@ -8,6 +8,7 @@ import com.github.commoble.sandbox.common.electrical.ChargePacket;
 import com.github.commoble.sandbox.common.item.ItemRegistrar;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockContainer;
 import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
@@ -37,4 +38,27 @@ public class BlockWire extends Block implements IElectricalBlock
 		// TODO Auto-generated method stub
 		return this.CONNECTABLE_FACES;
 	}
+	
+	@Override
+    /**
+     * Called serverside after this block is replaced with another in Chunk, but before the Tile Entity is updated
+     */
+    public void breakBlock(World worldIn, BlockPos pos, IBlockState state)
+    {
+        super.breakBlock(worldIn, pos, state);
+    }
+
+    /**
+     * Called when a neighboring block was changed and marks that this state should perform any checks during a neighbor
+     * change. Cases may include when redstone power is updated, cactus blocks popping off due to a neighboring solid
+     * block, etc.
+     */
+	/*
+	@Override
+    @Deprecated
+    public void neighborChanged(IBlockState state, World worldIn, BlockPos pos, Block blockIn, BlockPos fromPos)
+    {
+		
+    }
+    */
 }
